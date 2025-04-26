@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase"
-import { Order, order } from "@/types-d"
+import { Order } from "@/types-d"
 import { collection, doc, getDocs } from "firebase/firestore"
 import { NextResponse } from "next/server"
 

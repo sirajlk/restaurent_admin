@@ -3,14 +3,11 @@
 import {Store} from '@/types-d'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
-  CommandItem,
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command"
@@ -19,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Check, ChevronsUpDown, StoreIcon } from 'lucide-react'
+import {  ChevronsUpDown, StoreIcon } from 'lucide-react'
 import { StoreListItem } from './store-list-item'
 import { useStoreModel } from '@/hooks/use-store-model'
 import { CreateNewStoreItem } from './create-store-item'
