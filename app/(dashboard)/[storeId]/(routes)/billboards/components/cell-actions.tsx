@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState } from "react";
 import { BillboardColumns } from "./columns";
 import { useParams, useRouter } from "next/navigation";
@@ -17,9 +18,11 @@ import { deleteObject, ref } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 import axios from "axios";
 import { AlertModel } from "@/components/model/alert-model";
+
 interface CellActionsProps {
   data: BillboardColumns;
 }
+
 const CellActions = ({ data }: CellActionsProps) => {
   const router = useRouter();
   const params = useParams();
@@ -28,54 +31,63 @@ const CellActions = ({ data }: CellActionsProps) => {
   const [open, setOpen] = useState(false);
 
   const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id)
-    toast.success('Billboard ID copied succesfully')
-  }
-  
-  const onDelete = async() => {
-    try{
-      setIsLoading(true)
+    navigator.clipboard.writeText(id);
+    toast.success('Billboard ID copied successfully');
+  };
+
+  const onDelete = async () => {
+    try {
+      setIsLoading(true);
       await deleteObject(ref(storage, data.imageUrl)).then(async () => {
-         await axios.delete(`/api/${params.storeId}/billboards/${data.id}`)
-      } )
-      toast.success('Billboard Removed')
-      location.refresh()
-      router.push(`/${params.storeId}/billboards`)
-    } catch(error){
-      toast.error('something went wrong')
-      console.log(error)
-    }finally{
-      setIsLoading(false)
-      setOpen(false)
+        await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+      });
+      toast.success('Billboard Removed');
+      router.refresh(); // ✅ soft refresh the page
+    } catch (error) {
+      toast.error('Something went wrong');
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      setOpen(false);
     }
-  }
+  };
+
   return (
     <>
-    <AlertModel
-      isOpen= {open}
-      onClose= {() => setOpen(false)}
-      onConfirm={onDelete}
-      loading={isLoading}
-     />
+      <AlertModel
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={isLoading}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Button className="h-8 w-8 p-0" variant='ghost'>
-                <span className="sr-only">Open</span>
-                <MoreVertical className="h-4 w-4" />
-            </Button>
+          <Button className="h-8 w-8 p-0" variant="ghost">
+            <span className="sr-only">Open</span>
+            <MoreVertical className="h-4 w-4" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={() => onCopy(data.id)}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => onCopy(data.id)}
+          >
             <Copy className="h-4 w-4 mr-2" />
             Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}
+          >
             <Edit className="h-4 w-4 mr-2" />
             Update
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => setOpen(true)}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
             <Trash className="h-4 w-4 mr-2" />
             Delete
           </DropdownMenuItem>
